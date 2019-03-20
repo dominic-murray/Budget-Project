@@ -15,6 +15,14 @@ var budgetController = (function() {
         this.value = value;
      };
     
+    var calculateTotel = function(type) {
+        var sum = 0;
+        data.allItems[type].forEach(function(cur) {
+            sum += cur.value;
+        });
+        data.totals[type] = sum;
+    };
+    
     var data = {
         allItems: {
             exp: [],
@@ -23,7 +31,9 @@ var budgetController = (function() {
         totals: {
             exp: 0,
             inc: 0
-        }
+        },
+        budget: 0,
+        percentage: -1
         
     };
     
@@ -50,6 +60,33 @@ var budgetController = (function() {
             
             // return the new element
             return newItem;
+        },
+        
+        calculateBudget: function() {
+            
+            // calculate total income and expenses
+            calculateTotel('exp');
+            calculateTotel('inc');
+            
+            // calculate the budget income - expenses
+            data.budget = data.totals.inc - data.totals.exp;
+            
+            // calculate the precentage of income that has been spent
+            if (data.totals.inc > 0) {
+                data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+            } else {
+                data.percentage = -1;
+            }
+
+        },
+        
+        getBudget: function() {
+            return {
+                budget: data.budget,
+                totalInc: data.totals.inc,
+                totalExp: data.totals.exp,
+                percentage: data.percentage
+            };
         },
         
         testing: function(){
@@ -153,9 +190,15 @@ var controller = (function(budgetCtrl, UICtrl) {
         
         // calculate budget 
         
+        budgetCtrl.calculateBudget();
+        
         // method to return the budget
         
+        var budget = budgetCtrl.getBudget();
+        
         // display the budget on the UI.
+        console.log(budget);
+        
     };
     
     var ctrlAddItem = function() {
