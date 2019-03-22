@@ -75,14 +75,14 @@ body {
 }
 
 .budget__expenses {
-    background-color: #FF5049;
+    background-color: #e74c3c;
 }
 
 .budget__income--text,
 .budget__expenses--text {
     float: left;
     font-size: 13px;
-    color: #444;
+    color: #333;
     margin-top: 2px;
 }
 
